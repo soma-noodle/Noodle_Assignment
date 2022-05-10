@@ -140,10 +140,10 @@
 
         #region Task04b_CHECKOUT
 
-        [HttpGet("get-customers3")]
-        public async Task<string> GetCustomers3()
+        [HttpPost("cart-checkout-process")]
+        public async Task<string> CartCheckoutProcess(CheckoutModel model)
         {
-            return await _checkOutService.ExecuteAsync();
+            return await _checkOutService.ExecuteAsync(model);
         }
 
         #endregion

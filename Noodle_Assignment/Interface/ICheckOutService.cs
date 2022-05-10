@@ -2,6 +2,6 @@
 {
     public interface ICheckOutService
     {
-        Task<string> ExecuteAsync();
+        Task<string> ExecuteAsync(CheckoutModel model);
     }
 }
