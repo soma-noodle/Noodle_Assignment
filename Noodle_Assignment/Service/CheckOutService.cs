@@ -28,7 +28,7 @@
             var myLineItemDraft = new LineItemDraft()
             {
                 ProductId = "81237e3c-ef8e-4ba9-b035-78c0d6c10712",
-                Sku= "M0E20000000F1YN",
+                Sku = "M0E20000000F1YN",
                 VariantId = 1,
                 Quantity = 1
             };
@@ -41,7 +41,7 @@
                 BillingAddress = customer?.Addresses[0],
                 LineItems = lstLineItems
             };
-                        
+
             var cart = await _client.WithApi().WithProjectKey(projectKey)
                 .Carts()
                 .Post(cartDraft)
@@ -50,6 +50,8 @@
             Console.WriteLine($"Cart {cart.Id} for customer: {cart.CustomerId}");
 
             // TODO: GET a channel if your inventory mode will not be NONE
+
+            // Soma TODO
 
             // TODO: ADD items to the cart
 
@@ -74,14 +76,42 @@
               .ExecuteAsync();
 
             // TODO: ADD discount coupon code to the cart
-            string cartDiscountId = "e64f8af9-2bc4-41ee-864f-3d4b0d42365b";
-            string cartDiscountKey = "SAVE-20";
+            string cartDiscountId = "e64f8af9-2bc4-41ee-864f-3d4b0d42365b"; //Key is SAVE-20
 
-            //soma todo for add discuson 
+            var actionForAddDiscountCode = new CartAddDiscountCodeAction()
+            {
+                Code = cartDiscountId
+            };
+            var cartUpdateWithDiscountCode = new CartUpdate()
+            {
+                Actions = new List<ICartUpdateAction>() { actionForAddDiscountCode },
+                Version = updatedCartWithNewLineItem?.Version ?? 0,
+            };
+
+            var updatedCartWithDiscountCode = await _client.WithApi().WithProjectKey(projectKey)
+              .Carts()
+              .WithId(updatedCartWithNewLineItem?.Id)
+              .Post(cartUpdateWithDiscountCode)
+              .ExecuteAsync();
 
             // TODO: RECALCULATE the cart
 
+            var actionForRecalculateCart = new CartRecalculateAction();
+
+            var cartUpdateWithRecalculateCart = new CartUpdate()
+            {
+                Actions = new List<ICartUpdateAction> { actionForRecalculateCart },
+                Version = updatedCartWithDiscountCode?.Version ?? 0,
+            };
+
+            var updatedCartWithRecalculate = await _client.WithApi().WithProjectKey(projectKey)
+              .Carts()
+              .WithId(updatedCartWithDiscountCode?.Id)
+              .Post(cartUpdateWithRecalculateCart)
+              .ExecuteAsync();
+
             // TODO: ADD default shipping to the cart
+
 
             // TODO: CREATE a payment 
 
