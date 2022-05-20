@@ -150,8 +150,8 @@
 
         #region Task04c_CART_MERGING
 
-        [HttpGet("get-customers4")]
-        public async Task<string> GetCustomers4()
+        [HttpPost("merge-cart")]
+        public async Task<string> MergeCart()
         {
             return await _cartMergingService.ExecuteAsync();
         }
@@ -160,10 +160,10 @@
 
         #region Task05A_INSTORE
 
-        [HttpGet("get-customers5")]
-        public async Task<string> GetCustomers5()
+        [HttpPost("create-cart-in-store")]
+        public async Task<string> CreateCartInStore()
         {
-            return await _cartMergingService.ExecuteAsync();
+            return await _inStoreService.ExecuteAsync();
         }
 
         #endregion
