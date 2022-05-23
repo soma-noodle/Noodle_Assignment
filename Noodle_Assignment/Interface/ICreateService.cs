@@ -2,6 +2,6 @@
 {
     public interface ICreateService
     {
-        Task<string> ExecuteAsync(CustomerDraft draft);
+        Task<string> ExecuteAsync(CustomerModel customerModel);
     }
 }

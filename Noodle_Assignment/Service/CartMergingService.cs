@@ -11,26 +11,26 @@
             projectKey = configuration.GetValue<string>("Client:ProjectKey");
         }
 
-        public async Task<string> ExecuteAsync()
+        public async Task<string> ExecuteAsync(CartMergeModel cartMergeModel)
         {
             var channel = await _client.WithApi()
                 .WithProjectKey(projectKey)
                 .Channels()
-                .WithId("e3e0d1d3-e0d4-432a-a9ad-fc2bb0eb21db")
+                .WithId(cartMergeModel.ChannelId) // e3e0d1d3-e0d4-432a-a9ad-fc2bb0eb21db
                 .Get()
                 .ExecuteAsync();
 
             var customer = await _client.WithApi()
                                .WithProjectKey(projectKey)
                                .Customers()
-                               .WithId("9215ed81-83a8-4741-b8cd-2a8f51dbce1a")
+                               .WithId(cartMergeModel.CustomerId) //9215ed81-83a8-4741-b8cd-2a8f51dbce1a
                                .Get()
                                .ExecuteAsync();
 
             //Create Cart for customer
             var lineItemDraft = new LineItemDraft()
             {
-                Sku = "A0E2000000024BC",
+                Sku = cartMergeModel.SKU, // "A0E2000000024BC",
                 SupplyChannel = new ChannelResourceIdentifier { Id = channel.Id },
 
                 Quantity = 1,
@@ -41,7 +41,7 @@
             var lineItemDrafts = new List<ILineItemDraft>() { lineItemDraft };
             var cartDraft = new CartDraft()
             {
-                Currency = "INR",
+                Currency = cartMergeModel.Currency, // INR
                 CustomerId = customer.Id,
                 CustomerEmail = customer.Email,
                 LineItems = lineItemDrafts,
@@ -59,17 +59,17 @@
 
             var lineItemDraftForAnnonymous = new LineItemDraft()
             {
-                Sku = "A0E2000000027DV",
+                Sku =cartMergeModel.SKU, // A0E2000000027DV
                 SupplyChannel = new ChannelResourceIdentifier { Id = channel.Id },
                 Quantity = 1,
-                ExternalPrice = Money.FromDecimal("INR", 299M),
+                ExternalPrice = Money.FromDecimal(cartMergeModel.Currency, cartMergeModel.Price),
 
             };
 
             var lineItemDraftsForAnnonymous = new List<ILineItemDraft>() { lineItemDraftForAnnonymous };
             var annonymosCartDraft = new CartDraft()
             {
-                Currency = "INR",
+                Currency = cartMergeModel.Currency, // INR
                 AnonymousId = "1234",
 
                 Country = "DE",

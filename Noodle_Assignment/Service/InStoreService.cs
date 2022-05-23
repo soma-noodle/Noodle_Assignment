@@ -11,36 +11,39 @@
             projectKey = configuration.GetValue<string>("Client:ProjectKey");
         }
 
-        public async Task<string> ExecuteAsync()
+        public async Task<string> ExecuteAsync(InStoreModel inStoreModel)
         {
             var customer = await _client.WithApi()
                                 .WithProjectKey(projectKey)
                                 .Customers()
-                                .WithId("9215ed81-83a8-4741-b8cd-2a8f51dbce1a")
+                                .WithId(inStoreModel.CustomerId) //9215ed81-83a8-4741-b8cd-2a8f51dbce1a"
                                 .Get()
                                 .ExecuteAsync();
 
             var store = await _client.WithApi()
                 .WithProjectKey(projectKey)
                 .Stores()
-                .WithId("4b92ce2d-9f02-4e11-90fb-d366e41813a2") //DACH region
+                .WithId(inStoreModel.StoreId) //4b92ce2d-9f02-4e11-90fb-d366e41813a2 --> DACH region
                 .Get()
                 .ExecuteAsync();
 
             var lineItemDraft = new LineItemDraft()
             {
 
-                ProductId = "661a95b5-fe1a-4a53-bd0e-f6de70951c50",
-                VariantId = 1,
-                Quantity = 1,
-                ExternalPrice = Money.FromDecimal("INR", 199M)
+                ProductId = inStoreModel.LineItemModel.ProductId,
+                VariantId = inStoreModel.LineItemModel.VariantId,
+
+                ExternalPrice = Money.FromDecimal(inStoreModel.LineItemModel.Currency, inStoreModel.LineItemModel.Price)
 
             };
+
             var lineItemDrafts = new List<ILineItemDraft>() { lineItemDraft };
+
             var storeResource = new StoreResourceIdentifier()
             {
                 Id = store.Id
             };
+
             var cartDraft = new CartDraft()
             {
                 Currency = "INR",

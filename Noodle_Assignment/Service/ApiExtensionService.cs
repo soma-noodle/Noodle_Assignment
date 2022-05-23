@@ -13,8 +13,33 @@
 
         public async Task<string> ExecuteAsync()
         {
-            await Task.CompletedTask;
-            return "";
+            var extensionTrigger = new ExtensionTrigger()
+            {
+                Actions = new List<IExtensionAction>() { IExtensionAction.Create },
+                ResourceTypeId = IExtensionResourceTypeId.Order
+            };
+
+            var httpDestination = new HttpDestination()
+            {
+                Type = "HTTP",
+                Url = "https://api.australia-southeast1.gcp.commercetools.com/"
+            };
+
+
+            var extensionDraft = new ExtensionDraft()
+            {
+                Destination = httpDestination,
+                Triggers = new List<IExtensionTrigger>() { extensionTrigger },
+                Key = "Demo"
+            };
+
+            var extension = await _client.WithApi()
+             .WithProjectKey(projectKey)
+             .Extensions()
+             .Post(extensionDraft)
+             .ExecuteAsync();
+
+            return $"extension created with Id {extension.Id}";
         }
     }
 }

@@ -11,7 +11,7 @@
             projectKey = configuration.GetValue<string>("Client:ProjectKey");
         }
 
-        public async Task<string> ExecuteAsync(CustomerDraft customerDraft)
+        public async Task<string> ExecuteAsync(CustomerModel customerModel)
         {
 
             // CREATE customer draft
@@ -31,15 +31,21 @@
             //    DefaultBillingAddress = 0
             //};
 
-            // TODO: if you are sending key value in request body, remove below line in.
-            // We added this line to avoid issue "Deserialization of interface types is not supported."
-            customerDraft.Addresses = new List<IBaseAddress>{
+            var customerDraft = new CustomerDraft
+            {
+                Email = customerModel.Email,
+                Password = customerModel.Password,
+                Key = Guid.NewGuid().ToString("n").Substring(0, 8),
+                FirstName = customerModel.FirstName,
+                LastName = customerModel.LastName,
+                Addresses = new List<IBaseAddress>{
                         new AddressDraft {
-                            Country = "DE",
+                            Country = customerModel.Country,
                     }
-                };
-
-            customerDraft.Key = Guid.NewGuid().ToString("n").Substring(0, 8); // TODO: if you are sending key value in request body, remove this line in
+                },
+                DefaultShippingAddress = 0,
+                DefaultBillingAddress = 0
+            };
 
             // TODO: SIGNUP a customer
 

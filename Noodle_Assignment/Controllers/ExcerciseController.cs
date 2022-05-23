@@ -95,9 +95,9 @@
         //}
 
         [HttpPost("create-customer-with-email-confirmation")]
-        public async Task<string> CreateCustomerWithEmailConfirmation([FromBody] CustomerDraft draft)
+        public async Task<string> CreateCustomerWithEmailConfirmation([FromBody] CustomerModel customerModel)
         {
-            return await _createService.ExecuteAsync(draft);
+            return await _createService.ExecuteAsync(customerModel);
         }
 
         #endregion
@@ -151,9 +151,9 @@
         #region Task04c_CART_MERGING
 
         [HttpPost("merge-cart")]
-        public async Task<string> MergeCart()
+        public async Task<string> MergeCart([FromBody] CartMergeModel cartMergeModel)
         {
-            return await _cartMergingService.ExecuteAsync();
+            return await _cartMergingService.ExecuteAsync(cartMergeModel);
         }
 
         #endregion
@@ -161,37 +161,37 @@
         #region Task05A_INSTORE
 
         [HttpPost("create-cart-in-store")]
-        public async Task<string> CreateCartInStore()
+        public async Task<string> CreateCartInStore([FromBody] InStoreModel inStoreModel)
         {
-            return await _inStoreService.ExecuteAsync();
+            return await _inStoreService.ExecuteAsync(inStoreModel);
         }
 
         #endregion
 
         #region Task05B_Me
 
-        [HttpGet("get-customers6")]
-        public async Task<string> GetCustomers6()
+        [HttpPost("my-profile")]
+        public async Task<string> MyProfile([FromBody] MeClientModel meClient)
         {
-            return await _meService.ExecuteAsync();
+            return await _meService.ExecuteAsync(meClient);
         }
 
         #endregion
 
         #region Task05c_PRODUCTSELECTIONS
 
-        [HttpGet("get-customers7")]
-        public async Task<string> GetCustomers7()
+        [HttpPost("product-selections")]
+        public async Task ProductSelections()
         {
-            return await _productSelectionsService.ExecuteAsync();
+            await _productSelectionsService.ExecuteAsync();
         }
 
         #endregion
 
         #region Task06a_SEARCH
 
-        [HttpGet("get-customers8")]
-        public async Task<string> GetCustomers8()
+        [HttpPost("search")]
+        public async Task<string> Search()
         {
             return await _searchService.ExecuteAsync();
         }
@@ -200,8 +200,8 @@
 
         #region Task06b_PAGEDQUERY
 
-        [HttpGet("get-customers9")]
-        public async Task<string> GetCustomers9()
+        [HttpPost("get-products-sort-by-id")]
+        public async Task<string> GetProductsSortById()
         {
             return await _pagedQueryService.ExecuteAsync();
         }
@@ -220,8 +220,8 @@
 
         #region Task07a_CUSTOMTYPES
 
-        [HttpGet("get-customers10")]
-        public async Task<string> GetCustomers10()
+        [HttpPost("add-customfield-to-customer")]
+        public async Task<string> AddCustomFieldToCustomer()
         {
             return await _customTypesService.ExecuteAsync();
         }
@@ -230,8 +230,8 @@
 
         #region Task07b_CUSTOMOBJECTS
 
-        [HttpGet("get-customers11")]
-        public async Task<string> GetCustomers11()
+        [HttpPost("create-custom-object")]
+        public async Task<string> CreateCustomObject()
         {
             return await _customObjectsService.ExecuteAsync();
         }
@@ -240,8 +240,8 @@
 
         #region Task07c_APIEXTENSION
 
-        [HttpGet("get-customers12")]
-        public async Task<string> GetCustomers12()
+        [HttpPost("create-api-extension-service")]
+        public async Task<string> CreateAPIExtensionService()
         {
             return await _apiExtensionService.ExecuteAsync();
         }

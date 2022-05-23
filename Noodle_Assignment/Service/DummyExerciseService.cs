@@ -14,7 +14,7 @@
         public async Task<string> ExecuteAsync()
         {
             await Task.CompletedTask;
-            return "Welcome to Dummy Exercise Execute method!!";
+            return "Welcome to the Dummy Exercise Execute method!!";
         }
     }
 }

@@ -16,9 +16,9 @@
             // TODO: CREATE OrderPacked stateDraft, state
             var stateOrde1Draft = new StateDraft
             {
-                Key = model.StateOrder1_Key,
+                Key = model.InitialOrderStateKey,
                 Initial = true,
-                Name = new LocalizedString { { "en", model.StateOrder1_Name } },
+                Name = new LocalizedString { { "en", model.InitialOrderStateName } },
                 Type = IStateTypeEnum.OrderState
             };
 
@@ -30,9 +30,9 @@
             // TODO: CREATE OrderShipped stateDraft, state
             var stateOrder2Draft = new StateDraft
             {
-                Key = model.StateOrder2_Key,
+                Key = model.TransitionedOrderStateKey,
                 Initial = false,
-                Name = new LocalizedString { { "en", model.StateOrder2_Name } },
+                Name = new LocalizedString { { "en", model.TrasitionedOrderStateName } },
                 Type = IStateTypeEnum.OrderState
             };
 
@@ -62,7 +62,6 @@
                 .Post(stateUpdate)
                 .ExecuteAsync();
 
-            //Console.WriteLine($"stateOrderShipped Id : {stateOrderShipped.Id}, stateOrderPacked transition to:  {updatedStateOrderPacked.Transitions[0].Id}");
             return "stateOrder2 Id : " + order2Response?.Id + ", stateOrder1 transition to:  " + updatedOrder1response?.Transitions[0].Id;
         }
     }

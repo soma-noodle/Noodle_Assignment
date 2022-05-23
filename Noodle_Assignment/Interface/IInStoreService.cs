@@ -2,6 +2,6 @@
 {
     public interface IInStoreService
     {
-        Task<string> ExecuteAsync();
+        Task<string> ExecuteAsync(InStoreModel inStoreModel);
     }
 }
