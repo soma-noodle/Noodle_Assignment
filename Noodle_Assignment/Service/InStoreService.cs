@@ -16,25 +16,23 @@
             var customer = await _client.WithApi()
                                 .WithProjectKey(projectKey)
                                 .Customers()
-                                .WithId(inStoreModel.CustomerId) //9215ed81-83a8-4741-b8cd-2a8f51dbce1a"
+                                .WithId(inStoreModel.CustomerId)
                                 .Get()
                                 .ExecuteAsync();
 
             var store = await _client.WithApi()
                 .WithProjectKey(projectKey)
                 .Stores()
-                .WithId(inStoreModel.StoreId) //4b92ce2d-9f02-4e11-90fb-d366e41813a2 --> DACH region
+                .WithId(inStoreModel.StoreId)
                 .Get()
                 .ExecuteAsync();
 
             var lineItemDraft = new LineItemDraft()
             {
-
                 ProductId = inStoreModel.LineItemModel.ProductId,
                 VariantId = inStoreModel.LineItemModel.VariantId,
 
                 ExternalPrice = Money.FromDecimal(inStoreModel.LineItemModel.Currency, inStoreModel.LineItemModel.Price)
-
             };
 
             var lineItemDrafts = new List<ILineItemDraft>() { lineItemDraft };
@@ -46,17 +44,16 @@
 
             var cartDraft = new CartDraft()
             {
-                Currency = "INR",
+                Currency = inStoreModel.LineItemModel.Currency,
                 CustomerId = customer.Id,
                 CustomerEmail = customer.Email,
                 LineItems = lineItemDrafts,
                 BillingAddress = customer.Addresses[0],
                 Store = storeResource
-
             };
+
             var storeCart = await _client.WithApi()
                 .WithProjectKey(projectKey)
-
                 .InStoreKeyWithStoreKeyValue(store.Key)
                 .Carts()
                 .Post(cartDraft)

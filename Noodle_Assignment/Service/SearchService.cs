@@ -13,14 +13,14 @@
 
         public async Task<string> ExecuteAsync()
         {
-            var product = await _client.WithApi()
-                 .WithProjectKey(projectKey)
-                 .Products()
-                 .WithKey("joinville")
-                 .Get()
-                 .ExecuteAsync();
+            var productType = await _client.WithApi()
+                .WithProjectKey(projectKey)
+                .ProductTypes()
+                .WithKey("main")
+                .Get()
+                .ExecuteAsync();
 
-            var filterQuery = $"id:\"{product.Id}\"";
+            var filterQuery = $"productType.id:\"{productType.Id}\"";
 
             var facet = "variants.attributes.color as color";
 
@@ -39,9 +39,11 @@
 
             searchResponse.Results.ForEach(p => Console.WriteLine(p.Name["en"]));
 
+            //Console.WriteLine($"Number of Facets: {productProjection.Facets.Count}");
+
             var colorFacetResult = searchResponse.Facets["color"] as TermFacetResult;
 
-            foreach (var term in colorFacetResult.Terms)
+            foreach (var term in colorFacetResult?.Terms)
             {
                 Console.WriteLine($"Term : {term.Term}, Count: {term.Count}");
             }

@@ -181,9 +181,9 @@
         #region Task05c_PRODUCTSELECTIONS
 
         [HttpPost("product-selections")]
-        public async Task ProductSelections()
+        public async Task<string> ProductSelections([FromBody] ProductSelectionModel productSelectionModel)
         {
-            await _productSelectionsService.ExecuteAsync();
+            return await _productSelectionsService.ExecuteAsync(productSelectionModel);
         }
 
         #endregion
@@ -221,9 +221,9 @@
         #region Task07a_CUSTOMTYPES
 
         [HttpPost("add-customfield-to-customer")]
-        public async Task<string> AddCustomFieldToCustomer()
+        public async Task<string> AddCustomFieldToCustomer([FromBody] CustomTypeModel customTypeModel)
         {
-            return await _customTypesService.ExecuteAsync();
+            return await _customTypesService.ExecuteAsync(customTypeModel);
         }
 
         #endregion

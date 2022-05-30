@@ -13,10 +13,9 @@
 
         public async Task<string> ExecuteAsync()
         {
-            StreamReader r = new("Resources/compatibility-info.json");
+            StreamReader r = new StreamReader("Resources/compatibility-info.json");
             string jsonString = r.ReadToEnd();
             var m = JsonConvert.DeserializeObject(jsonString);
-
             var customObjectDraft = new CustomObjectDraft()
             {
                 Key = "custom_object",
@@ -29,6 +28,7 @@
                 .CustomObjects()
                 .Post(customObjectDraft)
                 .ExecuteAsync();
+
 
             return $"custom object created with Id {customObject.Id} with version {customObject.Version}";
         }

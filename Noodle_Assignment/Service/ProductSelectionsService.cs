@@ -11,25 +11,27 @@
             projectKey = configuration.GetValue<string>("Client:ProjectKey");
         }
 
-        public async Task<string> ExecuteAsync()
+        public async Task<string> ExecuteAsync(ProductSelectionModel productSelectionModel)
         {
             //Create Product Selection
             var productSelectionDraft = new ProductSelectionDraft()
             {
                 Key = Guid.NewGuid().ToString(),
-                Name = new LocalizedString { { "product", "product" } }
+                Name = new LocalizedString { { "de", productSelectionModel.Name } }
             };
-            
+
             var productSelection = await _client.WithApi()
                       .WithProjectKey(projectKey)
                       .ProductSelections()
                       .Post(productSelectionDraft)
                       .ExecuteAsync();
-            
+
+            Console.WriteLine($"Product selection: {productSelection.Id} with {productSelection.ProductCount} products");
+
             //Add product to the selection
             var addedProduct = new ProductSelectionAddProductAction()
             {
-                Product = new ProductResourceIdentifier() { Id = "e75d6e69-ed6e-4aea-ab59-e2641f2f927e" }
+                Product = new ProductResourceIdentifier() { Id = productSelectionModel.ProductId }
             };
 
             var updateProductSelection = new ProductSelectionUpdate()
@@ -45,16 +47,18 @@
                 .Post(updateProductSelection)
                 .ExecuteAsync();
 
+            Console.WriteLine($"Berlin Product selection: {updatedProductSelection.Id} with {updatedProductSelection.ProductCount} products");
+
             var store = await _client.WithApi()
                .WithProjectKey(projectKey)
                .Stores()
-               .WithId("4b92ce2d-9f02-4e11-90fb-d366e41813a2")
+               .WithId(productSelectionModel.StoreId)
                .Get()
                .ExecuteAsync();
-            
+
             var addProductSelection = new StoreAddProductSelectionAction()
             {
-                ProductSelection = new ProductSelectionResourceIdentifier() { Id = productSelection?.Id },
+                ProductSelection = new ProductSelectionResourceIdentifier() { Id = productSelection.Id },
                 Active = true,
             };
 
@@ -67,10 +71,10 @@
             var updatedStore = await _client.WithApi()
                  .WithProjectKey(projectKey)
                  .Stores()
-                 .WithId("4b92ce2d-9f02-4e11-90fb-d366e41813a2")
+                 .WithId(productSelectionModel.StoreId)
                  .Post(storeUpdate)
                  .ExecuteAsync();
-            
+
             return $"Updated store {updatedStore.Key} with selection {updatedStore.ProductSelections?.Count}";
         }
     }

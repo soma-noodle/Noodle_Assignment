@@ -19,7 +19,7 @@
 
             var customer = await _client.WithApi().WithProjectKey(projectKey)
               .Customers()
-              .WithId("9215ed81-83a8-4741-b8cd-2a8f51dbce1a")
+              .WithId(model.CustomerId)
               .Get()
               .ExecuteAsync();
 

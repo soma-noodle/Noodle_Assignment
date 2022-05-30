@@ -16,6 +16,7 @@
             string lastId = null; int pageSize = 2; int currentPage = 1; bool lastPage = false;
 
             IProductPagedQueryResponse? response = null;
+            int totCount = 0;
 
             while (!lastPage)
             {
@@ -46,26 +47,31 @@
                    .ExecuteAsync();
                 }
 
-                Console.WriteLine($"Show Results of Page {currentPage}");
-
-                foreach (var product in response.Results)
+                if (response.Results.Any())
                 {
-                    if (product.MasterData.Current.Name.ContainsKey("en"))
-                    {
-                        Console.WriteLine($"{product.MasterData.Current.Name["en"]}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{product.MasterData.Current.Name["de"]}");
-                    }
+                    //Console.WriteLine($"Show Results of Page {currentPage}");
+                    //foreach (var product in response.Results)
+                    //{
+                    //    if (product.MasterData.Current.Name.ContainsKey("en"))
+                    //    {
+                    //        Console.WriteLine($"{product.MasterData.Current.Name["en"]}");
+                    //    }
+                    //    else
+                    //    {
+                    //        Console.WriteLine($"{product.MasterData.Current.Name["de"]}");
+                    //    }
+                    //}
+                    //Console.WriteLine("///////////////////////");
+
+                    currentPage++;
+                    lastId = response.Results.Last().Id;
+                    totCount += response.Results.Count;
                 }
 
-                currentPage++;
-                lastId = response.Results.Last().Id;
-                lastPage = response.Results.Count < pageSize;
+                lastPage = response?.Results.Count < pageSize;               
             }
 
-            return response.Results.Count.ToString();
+            return "Total Count: " + totCount;
         }
     }
 }
